@@ -1,4 +1,3 @@
-import numpy as np
 import texttable
 
 def format_r(r):
@@ -14,19 +13,20 @@ def format_r(r):
         return r
 
 def error_max(vin_ideal, vout_ideal, r1, r2, tol):
-    err1 = np.absolute(vout_ideal - vin_ideal * (1+tol)*r1 / ((1+tol) * r1 + (1-tol) * r2))
-    err2 = np.absolute(vout_ideal - vin_ideal * (1-tol)*r1 / ((1-tol) * r1 + (1+tol) * r2))
+    err1 = abs(vout_ideal - vin_ideal * (1+tol)*r1 / ((1+tol) * r1 + (1-tol) * r2))
+    err2 = abs(vout_ideal - vin_ideal * (1-tol)*r1 / ((1-tol) * r1 + (1+tol) * r2))
 
     return max((err1, err2))
 
 
 def main():
     # standard resistor values
-    r_series = np.array([1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7,
+    r_series = [1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7,
                          3.0,3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.2, 6.8, 7.5,
-                         8.2, 9.1])
+                         8.2, 9.1]
+
     # resistor orders of magnitude
-    r_factors = np.array([0, 1, 2, 3, 4, 5, 6])
+    r_factors = range(7)
 
     # get desired values
     vin_ideal = float(raw_input('Input voltage (V): '))
@@ -47,7 +47,7 @@ def main():
     for r1 in r_values:
         for r2 in r_values:
             vout = vin_ideal * r1 / (r1 + r2)
-            error = np.linalg.norm(vout - vout_ideal)
+            error = abs(vout - vout_ideal)
             current = 1000 * vin_ideal / (r1 + r2)
             if error <= err_tolerance and current <= max_current \
                     and error_max(vin_ideal, vout_ideal, r1, r2, r_tol) <= err_tolerance:
