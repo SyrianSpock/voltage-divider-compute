@@ -27,7 +27,7 @@ You will be asked to enter some parameter values:
 Dependencies
 ------------
 
-This script uses `numpy` and `texttable` packages
+This script uses the `texttable` package.
 
 License
 -------
