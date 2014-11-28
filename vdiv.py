@@ -1,4 +1,5 @@
 import numpy as np
+import texttable
 
 def format_r (r):
     """Resistor values in human readable format"""
@@ -9,7 +10,7 @@ def format_r (r):
         r = "{:.1f}K".format(r / 1000.0)
         return r
     else:
-        r = "{:.1f}".format(r)
+        r = "{:.1f} ".format(r)
         return r
 
 # standard resistor values
@@ -42,13 +43,24 @@ for r1 in r_values:
         if error <= err_tolerance and current <= max_current:
             r_comb_list.append((format_r(r1),
                                 format_r(r2),
-                                "{:.1e}".format(error),
-                                "{:.2%}".format(error / vout_ideal),
-                                "{:.1f}".format(current)))
+                                "{0:.2e}".format(error),
+                                "{0:.2%}".format(error / vout_ideal),
+                                "{0:.2f}".format(current)))
 
-# sort and print possible combinations
-print "All possible combinations"
-print "(R1, R2, Error (V), Error (%), Current (mA)"
-r_comb_list = sorted(r_comb_list, key=lambda x: x[2]) # sort by error
-for i in r_comb_list:
-    print i
+# sort by error
+r_comb_list = sorted(r_comb_list, key=lambda x: x[2])
+
+# print in a pretty table
+table = texttable.Texttable()
+
+table.set_deco(texttable.Texttable.HEADER)
+table.set_cols_dtype(['t', 't', 't', 't', 't'])
+table.set_cols_align(["r", "r", "r", "r", "r"])
+
+r_comb_rows = [["R1", "R2", "Error (V)", "Error (%)", "Current (mA)"]]
+for tu in r_comb_list:
+    r_comb_rows.append(list(tu))
+
+table.add_rows(r_comb_rows)
+
+print table.draw()
