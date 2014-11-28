@@ -12,7 +12,7 @@ In a terminal, on Linux:
 ```sh
 git clone https://github.com/SyrianSpock/voltage-divider-compute.git
 cd voltage-divider-compute
-python vdiv.py
+python2 vdiv.py
 ```
 
 You will be asked to enter some parameter values:
