@@ -11,6 +11,7 @@ r_factors = np.array([0, 1, 2, 3, 4, 5, 6])
 vin_ideal = float(raw_input('Input voltage (V): '))
 vout_ideal = float(raw_input('Output voltage (V): '))
 err_tolerance = float(raw_input('Tolerated error (V): '))
+max_current = float(raw_input('Maximum current (mA): '))
 
 # compute all possible combinations
 r_comb_list = []
@@ -22,7 +23,8 @@ for i in r_values:
                 r2 = k * 10**l
                 vout_est = vin_ideal * r1 / (r1 + r2)
                 error = np.linalg.norm(vout_est - vout_ideal)
-                if error <= err_tolerance:
+                current = vin_ideal / (r1 + r2) * 1000
+                if error <= err_tolerance and current <= max_current:
                     r1 = float("{0:.2f}".format(r1))
                     r2 = float("{0:.2f}".format(r2))
                     error = float("{0:.4f}".format(error))
@@ -30,6 +32,7 @@ for i in r_values:
                     r_comb_list.append((r1, r2, error, error_pct))
 
 # sort and print possible combinations
-r_comb_list.sort(1)
+r_comb_list.sort()
+
 for i in r_comb_list:
     print i
