@@ -30,6 +30,7 @@ for i in r_values:
                     r_comb_list.append((r1, r2, error, error_pct))
 
 # sort and print possible combinations
-r_comb_list.sort(1)
+r_comb_list.sort()
+
 for i in r_comb_list:
     print i
