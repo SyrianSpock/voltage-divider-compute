@@ -62,19 +62,20 @@ def main():
     vout_ideal = float(raw_input('Output voltage (V): '))
     err_tol = float(raw_input('Tolerated error (V): '))
     r_tol = float(raw_input('Resistance tolerance (%): ')) / 100.0
+    e_series = float(raw_input('E series (e12, e24, e48, e96, 192: '))
     max_current = float(raw_input('Maximum current (mA): '))
 
-    # choose resistor series according to resistance tolerance entered
-    if r_tol < 0.01:
+    # get resistor series according to user choice
+    if e_series == 'e192':
         r_series = [x / 100.0 for x in e192_series]
-    elif r_tol < 0.02:
+    elif e_series == 'e96':
         r_series = [x / 100.0 for x in e96_series]
-    elif r_tol < 0.05:
+    elif e_series == 'e48':
         r_series = [x / 100.0 for x in e48_series]
-    elif r_tol < 0.10:
-        r_series = [x / 100.0 for x in e24_series]
-    else:
+    elif e_series == 'e12':
         r_series = [x / 100.0 for x in e12_series]
+    else:
+        r_series = [x / 100.0 for x in e24_series] # e24 = default series
 
     # compute resistor values
     r_values = []
