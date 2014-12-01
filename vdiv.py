@@ -61,21 +61,25 @@ def main():
     vin_ideal = float(raw_input('Input voltage (V): '))
     vout_ideal = float(raw_input('Output voltage (V): '))
     err_tol = float(raw_input('Tolerated error (V): '))
-    r_tol = float(raw_input('Resistance tolerance (%): ')) / 100.0
-    e_series = float(raw_input('E series (e12, e24, e48, e96, 192: '))
+    e_series = raw_input('E series (e12, e24, e48, e96, e192): ')
     max_current = float(raw_input('Maximum current (mA): '))
 
     # get resistor series according to user choice
     if e_series == 'e192':
         r_series = [x / 100.0 for x in e192_series]
+        r_tol = 0.005
     elif e_series == 'e96':
         r_series = [x / 100.0 for x in e96_series]
+        r_tol = 0.01
     elif e_series == 'e48':
         r_series = [x / 100.0 for x in e48_series]
+        r_tol = 0.02
     elif e_series == 'e12':
         r_series = [x / 100.0 for x in e12_series]
+        r_tol = 0.05
     else:
         r_series = [x / 100.0 for x in e24_series] # e24 = default series
+        r_tol = 0.10
 
     # compute resistor values
     r_values = []
