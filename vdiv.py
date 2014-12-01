@@ -1,3 +1,4 @@
+import argparse
 import texttable
 
 def format_r(r):
@@ -57,12 +58,29 @@ def main():
     # resistor orders of magnitude
     r_factors = range(7)
 
+    #argparser
+    parser = argparse.ArgumentParser(description='Calculate the resitor values \
+            for a voltage divisor.')
+    parser.add_argument('vin_ideal', metavar='Vin', type=float, \
+            help = 'input voltage (V)')
+    parser.add_argument('vout_ideal', metavar = 'Vout', type=float, \
+            help = 'output voltage (V)')
+    parser.add_argument('-c', dest = 'max_current', \
+            type=float, default = 100, help = 'maximum current (mA)')
+    parser.add_argument('-e', dest = 'err_tol', type=float, \
+            default = 0.5, help = 'tolerated error (V)')
+    parser.add_argument('-s', dest = 'e_series', type=str, default = 'e24', \
+            choices = ['e12', 'e24', 'e48', 'e48', 'e96', 'e192'], \
+            help = 'E series')
+
+    args = parser.parse_args()
+
     # get desired values
-    vin_ideal = float(raw_input('Input voltage (V): '))
-    vout_ideal = float(raw_input('Output voltage (V): '))
-    err_tol = float(raw_input('Tolerated error (V): '))
-    e_series = raw_input('E series (e12, e24, e48, e96, e192): ')
-    max_current = float(raw_input('Maximum current (mA): '))
+    vin_ideal = args.vin_ideal
+    vout_ideal = args.vout_ideal
+    err_tol = args.err_tol
+    e_series = args.e_series
+    max_current = args.max_current
 
     # get resistor series according to user choice
     if e_series == 'e192':
@@ -76,10 +94,10 @@ def main():
         r_tol = 0.02
     elif e_series == 'e12':
         r_series = [x / 100.0 for x in e12_series]
-        r_tol = 0.05
+        r_tol = 0.10
     else:
         r_series = [x / 100.0 for x in e24_series] # e24 = default series
-        r_tol = 0.10
+        r_tol = 0.05
 
     # compute resistor values
     r_values = []
