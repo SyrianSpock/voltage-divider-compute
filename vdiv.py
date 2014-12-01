@@ -89,26 +89,27 @@ def main():
     for r1 in r_values:
         for r2 in r_values:
             vout = vin_ideal * r1 / (r1 + r2)
-            current = 1000 * vin_ideal / (r1 + r2)
+            current = 1000 * vout / r1
             error = error_max(vin_ideal, vout_ideal, r1, r2, r_tol)
             if error <= err_tol and current <= max_current:
                 r_comb_list.append((format_r(r1),
                                     format_r(r2),
+                                    "{0:.2f}".format(vout),
                                     "{0:.6f}".format(error),
                                     "{0:.4%}".format(error / vout_ideal),
                                     "{0:.4f}".format(current)))
 
     # sort by error
-    r_comb_list = sorted(r_comb_list, key=lambda x: x[2])
+    r_comb_list = sorted(r_comb_list, key=lambda x: x[3])
 
     # print in a pretty table
     table = texttable.Texttable()
 
     table.set_deco(texttable.Texttable.HEADER)
-    table.set_cols_dtype(['t', 't', 'e', 't', 't'])
-    table.set_cols_align(["r", "r", "r", "r", "r"])
+    table.set_cols_dtype(['t', 't', 't', 'e', 't', 't'])
+    table.set_cols_align(['r', 'r', 'r', 'r', 'r', 'r'])
 
-    r_comb_rows = [["R1", "R2", "Error (V)", "Error (%)", "Current (mA)"]]
+    r_comb_rows = [["R1", "R2", "Vout (V)", "Error (V)", "Error (%)", "Current (mA)"]]
     for tu in r_comb_list:
         r_comb_rows.append(list(tu))
 
