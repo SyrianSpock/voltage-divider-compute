@@ -62,7 +62,7 @@ def main():
     vout_ideal = float(raw_input('Output voltage (V): '))
     err_tol = float(raw_input('Tolerated error (V): '))
     r_tol = float(raw_input('Resistance tolerance (%): ')) / 100.0
-    e_series = float(raw_input('E series (e12, e24, e48, e96, 192: '))
+    e_series = raw_input('E series (e12, e24, e48, e96, e192): ')
     max_current = float(raw_input('Maximum current (mA): '))
 
     # get resistor series according to user choice
