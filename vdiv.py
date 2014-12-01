@@ -1,27 +1,33 @@
+""" This module finds the resistor values for a voltage divisor.
+"""
 import argparse
 import texttable
 
-def format_r(r):
-    """Resistor values in human readable format"""
-    if r >= 1000000:
-        r = "{:.1f}M".format(r / 1000000.0)
-        return r
-    elif r >= 1000:
-        r = "{:.1f}K".format(r / 1000.0)
-        return r
-    else:
-        r = "{:.1f}".format(r)
-        return r
 
-def error_max(vin_ideal, vout_ideal, r1, r2, tol):
+def format_r(res):
+    """Resistor values in human readable format"""
+    if res >= 1000000:
+        res = "{:.1f}M".format(res / 1000000.0)
+        return res
+    elif res >= 1000:
+        res = "{:.1f}K".format(res / 1000.0)
+        return res
+    else:
+        res = "{:.1f}".format(res)
+        return res
+
+def error_max(vin_ideal, vout_ideal, res1, res2, tol):
     """Worst case scenario error"""
-    err0 = abs(vout_ideal - vin_ideal * r1 / (r1 + r2))
-    err1 = abs(vout_ideal - vin_ideal * r1 / (r1 + ((1-tol) / (1+tol)) * r2))
-    err2 = abs(vout_ideal - vin_ideal * r1 / (r1 + ((1+tol) / (1-tol)) * r2))
+    err0 = abs(vout_ideal - vin_ideal * res1 / (res1 + res2))
+    err1 = abs(vout_ideal - \
+            vin_ideal * res1 / (res1 + ((1-tol) / (1+tol)) * res2))
+    err2 = abs(vout_ideal - \
+            vin_ideal * res1 / (res1 + ((1+tol) / (1-tol)) * res2))
     return max((err0, err1, err2))
 
 
 def main():
+    """ Where the magic happens (fuck you pylint)"""
     # standard resistor values series
     e12_series = [100, 120, 150, 180, 220, 270, 330, 390, 470, 560, 680, 820]
     e24_series = [100, 110, 120, 130, 150, 160, 180, 200, 220, 240, 270, 300,
@@ -62,16 +68,16 @@ def main():
     parser = argparse.ArgumentParser(description='Calculate the resitor values \
             for a voltage divisor.')
     parser.add_argument('vin_ideal', metavar='Vin', type=float, \
-            help = 'input voltage (V)')
-    parser.add_argument('vout_ideal', metavar = 'Vout', type=float, \
-            help = 'output voltage (V)')
-    parser.add_argument('-c', dest = 'max_current', \
-            type=float, default = 100, help = 'maximum current (mA)')
-    parser.add_argument('-e', dest = 'err_tol', type=float, \
-            default = 0.5, help = 'tolerated error (V)')
-    parser.add_argument('-s', dest = 'e_series', type=str, default = 'e24', \
-            choices = ['e12', 'e24', 'e48', 'e48', 'e96', 'e192'], \
-            help = 'E series')
+            help='input voltage (V)')
+    parser.add_argument('vout_ideal', metavar='Vout', type=float, \
+            help='output voltage (V)')
+    parser.add_argument('-c', dest='max_current', \
+            type=float, default=100, help='maximum current (mA)')
+    parser.add_argument('-e', dest='err_tol', type=float, \
+            default=0.5, help='tolerated error (V)')
+    parser.add_argument('-s', dest='e_series', type=str, default='e24', \
+            choices=['e12', 'e24', 'e48', 'e48', 'e96', 'e192'], \
+            help='E series')
 
     args = parser.parse_args()
 
@@ -103,19 +109,19 @@ def main():
     r_values = []
     for j in r_factors:
         for i in r_series:
-            r = i * 10**j
-            r_values.append(r)
+            res = i * 10**j
+            r_values.append(res)
 
     # compute combinations
     r_comb_list = []
-    for r1 in r_values:
-        for r2 in r_values:
-            vout = vin_ideal * r1 / (r1 + r2)
-            current = 1000 * vout / r1
-            error = error_max(vin_ideal, vout_ideal, r1, r2, r_tol)
+    for res1 in r_values:
+        for res2 in r_values:
+            vout = vin_ideal * res1 / (res1 + res2)
+            current = 1000 * vout / res1
+            error = error_max(vin_ideal, vout_ideal, res1, res2, r_tol)
             if error <= err_tol and current <= max_current:
-                r_comb_list.append((format_r(r1),
-                                    format_r(r2),
+                r_comb_list.append((format_r(res1),
+                                    format_r(res2),
                                     "{0:.2f}".format(vout),
                                     "{0:.6f}".format(error),
                                     "{0:.4%}".format(error / vout_ideal),
@@ -131,9 +137,10 @@ def main():
     table.set_cols_dtype(['t', 't', 't', 'e', 't', 't'])
     table.set_cols_align(['r', 'r', 'r', 'r', 'r', 'r'])
 
-    r_comb_rows = [["R1", "R2", "Vout (V)", "Error (V)", "Error (%)", "Current (mA)"]]
-    for tu in r_comb_list:
-        r_comb_rows.append(list(tu))
+    r_comb_rows = \
+            [["R1", "R2", "Vout (V)", "Error (V)", "Error (%)", "Current (mA)"]]
+    for res_comb in r_comb_list:
+        r_comb_rows.append(list(res_comb))
 
     table.add_rows(r_comb_rows)
 
