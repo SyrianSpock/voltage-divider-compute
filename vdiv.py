@@ -111,7 +111,7 @@ def comp_comb(vin_ideal, vout_ideal, r_tol, r_values, max_current, err_tol):
 
     return r_comb_list
 
-def print_table(r_comb_list):
+def print_table(r_comb_list, max_lines):
     """Print a pretty table using texttable module"""
     table = texttable.Texttable()
 
@@ -121,8 +121,12 @@ def print_table(r_comb_list):
 
     r_comb_rows = \
             [["R1", "R2", "Vout (V)", "Error (V)", "Error (%)", "Current (mA)"]]
+    line_count = 0
     for res_comb in r_comb_list:
+        line_count += 1
         r_comb_rows.append(list(res_comb))
+        if line_count >= max_lines:
+            break
 
     table.add_rows(r_comb_rows)
 
@@ -147,6 +151,8 @@ def main():
     parser.add_argument('-s', dest='e_series', type=str, default='e24', \
             choices=['e12', 'e24', 'e48', 'e48', 'e96', 'e192'], \
             help='E series')
+    parser.add_argument('-l', dest='max_lines', type=int, default=42, \
+            help='Maximum displayed lines')
 
     args = parser.parse_args()
 
@@ -156,6 +162,7 @@ def main():
     err_tol = args.err_tol
     e_series = args.e_series
     max_current = args.max_current
+    max_lines = args.max_lines
 
     # get resistor values
     r_tol, r_values = eseries_select(e_series)
@@ -168,7 +175,7 @@ def main():
     r_comb_list = sorted(r_comb_list, key=lambda x: x[3])
 
     # print pretty table
-    print_table(r_comb_list)
+    print_table(r_comb_list, max_lines)
 
 if __name__ == "__main__":
     main()
