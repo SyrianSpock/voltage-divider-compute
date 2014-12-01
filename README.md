@@ -22,7 +22,7 @@ You will be asked to enter some parameter values:
 * __Input voltage__ is the voltage at the input of the voltage divider in volts
 * __Output voltage__ is the voltage wanted at the output in volts
 * __Tolerated error__ is the error voltage tolerated on the output in volts
-* __Resistance tolerance__ is the tolerance on the resistor value as specified by the manufacturer in %
+* __E serie__ specifies the E serie (e12, e24, e48, e96, e192) to choose, which defines the possible resistor values as well as their tolerance
 * __Maximum current__ is the maximal current allowed through the divider in mA
 
 Dependencies
