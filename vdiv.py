@@ -73,6 +73,23 @@ def eseries_select(e_series):
     # return the array of resistor values
     return r_tol, r_values
 
+def comp_comb(vin_ideal, vout_ideal, r_tol, r_values, max_current, err_tol):
+    """Compute all combinations of suitable resistors"""
+    r_comb_list = []
+    for res1 in r_values:
+        for res2 in r_values:
+            vout = vin_ideal * res1 / (res1 + res2)
+            current = 1000 * vout / res1
+            error = error_max(vin_ideal, vout_ideal, res1, res2, r_tol)
+            if error <= err_tol and current <= max_current:
+                r_comb_list.append((format_r(res1),
+                                    format_r(res2),
+                                    "{0:.2f}".format(vout),
+                                    "{0:.4f}".format(error),
+                                    "{0:.4%}".format(error / vout_ideal),
+                                    "{0:.4f}".format(current)))
+    return r_comb_list
+
 def error_max(vin_ideal, vout_ideal, res1, res2, tol):
     """Worst case scenario error"""
     err1 = abs(vout_ideal - \
@@ -93,24 +110,6 @@ def format_r(res):
         res = "{:.1f}".format(res)
         return res
 
-def comp_comb(vin_ideal, vout_ideal, r_tol, r_values, max_current, err_tol):
-    """Compute all combinations of suitable resistors"""
-    r_comb_list = []
-    for res1 in r_values:
-        for res2 in r_values:
-            vout = vin_ideal * res1 / (res1 + res2)
-            current = 1000 * vout / res1
-            error = error_max(vin_ideal, vout_ideal, res1, res2, r_tol)
-            if error <= err_tol and current <= max_current:
-                r_comb_list.append((format_r(res1),
-                                    format_r(res2),
-                                    "{0:.2f}".format(vout),
-                                    "{0:.4f}".format(error),
-                                    "{0:.4%}".format(error / vout_ideal),
-                                    "{0:.4f}".format(current)))
-
-    return r_comb_list
-
 def print_table(r_comb_list, max_lines):
     """Print a pretty table using texttable module"""
     table = texttable.Texttable()
@@ -125,7 +124,7 @@ def print_table(r_comb_list, max_lines):
     for res_comb in r_comb_list:
         line_count += 1
         r_comb_rows.append(list(res_comb))
-        if line_count >= max_lines and max_lines != 0:
+        if line_count >= max_lines and max_lines >= 0:
             break
 
     table.add_rows(r_comb_rows)
