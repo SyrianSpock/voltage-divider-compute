@@ -7,13 +7,24 @@ used within the constraints fixed through specified parameters.
 Usage
 -----
 
-In a terminal, on Linux, type the following commands to run the script:
-
+In a terminal, on Linux, type the following commands to run the script for
+example:
 ```sh
 git clone https://github.com/SyrianSpock/voltage-divider-compute.git
 cd voltage-divider-compute
-python2 vdiv.py
+python2 vdiv.py 3.3 1.8 -s e192 -e 0.01 -c 10 -l 10
 ```
+
+In this example, the __input voltage__ is 3.3V, __output voltage__ is 1.8V.
+Then we specify optional arguments: we want to use the e192 series, we tolerate
+0.1V error on the __output voltage__, we want 10mA as __maximum current__ and
+we only want the script to display 10 possible combinations.
+
+For more details refer to the help menu:
+```sh
+python2 vdiv.py -h
+```
+
 
 Parameters
 ----------
