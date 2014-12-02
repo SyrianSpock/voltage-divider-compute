@@ -125,7 +125,7 @@ def print_table(r_comb_list, max_lines):
     for res_comb in r_comb_list:
         line_count += 1
         r_comb_rows.append(list(res_comb))
-        if line_count >= max_lines:
+        if line_count >= max_lines and max_lines != 0:
             break
 
     table.add_rows(r_comb_rows)
