@@ -1,7 +1,8 @@
+#!/usr/bin/env python
 """ This module finds the resistor values for a voltage divisor.
 """
 import argparse
-import texttable
+import texttable.texttable as texttable
 
 ### Global variables
 
@@ -129,7 +130,7 @@ def print_table(r_comb_list, max_lines):
 
     table.add_rows(r_comb_rows)
 
-    print table.draw()
+    print(table.draw())
 
 ### Main
 

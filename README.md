@@ -13,7 +13,9 @@ example:
 ```sh
 git clone https://github.com/SyrianSpock/voltage-divider-compute.git
 cd voltage-divider-compute
-python2 vdiv.py 3.3 1.8 -s e192 -e 0.01 -c 10 -l 10
+git submodule init
+git submodule update
+python vdiv.py 3.3 1.8 -s e192 -e 0.01 -c 10 -l 10
 ```
 
 In this example, the __input voltage__ is 3.3V, __output voltage__ is 1.8V.
@@ -39,7 +41,7 @@ The output should look like:
 
 For more details refer to the help menu:
 ```sh
-python2 vdiv.py -h
+python vdiv.py -h
 ```
 
 

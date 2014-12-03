@@ -1,0 +1,3 @@
+[submodule "texttable"]
+	path = texttable
+	url = https://github.com/bufordtaylor/python-texttable.git
