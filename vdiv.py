@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """ This module finds the resistor values for a voltage divisor.
 """
 import argparse
