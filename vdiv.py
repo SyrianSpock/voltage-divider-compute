@@ -6,6 +6,13 @@ import texttable.texttable as texttable
 
 ### Global variables
 
+SCHEMATIC = '''
+Vin --[ R2 ]--o--[ R1 ]--- GND
+              |
+             Vout
+'''
+
+
 # standard resistor values series
 E12_SERIES = [100, 120, 150, 180, 220, 270, 330, 390, 470, 560, 680, 820]
 E24_SERIES = [100, 110, 120, 130, 150, 160, 180, 200, 220, 240, 270, 300,
@@ -130,6 +137,7 @@ def print_table(r_comb_list, max_lines):
 
     table.add_rows(r_comb_rows)
 
+    print(SCHEMATIC)
     print(table.draw())
 
 ### Main
